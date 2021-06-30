@@ -1,5 +1,8 @@
 package me.pablo.renderer;
 
+import me.pablo.renderer.point.MyPoint;
+import me.pablo.renderer.shapes.MyPolygon;
+
 import javax.swing.JFrame;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -11,8 +14,8 @@ public class Display extends Canvas implements Runnable{
     private Thread thread;
     private JFrame frame;
     private static  String title = "3D Renderer";
-    private static  final int WIDTH = 800;
-    private static final int HEIGHT = 600;
+    public static  final int WIDTH = 800;
+    public static final int HEIGHT = 600;
     private static boolean running = false;
 
     public Display() {
@@ -94,8 +97,12 @@ public class Display extends Canvas implements Runnable{
         g.setColor(Color.BLACK);
         g.fillRect(0,0,WIDTH,HEIGHT);
 
-        g.setColor(Color.RED);
-        g.fillRect(50,100,200,200);
+        MyPolygon poly = new MyPolygon(
+                new MyPoint(0,100,0),
+                new MyPoint(0,0,0),
+                new MyPoint(0,50,50));
+        poly.render(g);
+
 
         g.dispose();
         bs.show();
