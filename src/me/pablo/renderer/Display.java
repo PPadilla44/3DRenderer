@@ -1,5 +1,8 @@
+package me.pablo.renderer;
+
 import javax.swing.JFrame;
 import java.awt.*;
+import java.awt.image.BufferStrategy;
 
 public class Display extends Canvas implements Runnable{
 
@@ -34,7 +37,7 @@ public class Display extends Canvas implements Runnable{
 
     public synchronized void start() {
         running = true;
-        this.thread = new Thread(this, "Display");
+        this.thread = new Thread(this, "me.pablo.Display");
         this.thread.start();
     }
 
@@ -49,6 +52,56 @@ public class Display extends Canvas implements Runnable{
 
     @Override
     public void run() {
+        long lastTime = System.nanoTime();
+        long timer = System.currentTimeMillis();
+        final double ns = 1000000000.0 / 60;
+        double delta = 0;
+        int frames = 0;
+
+        while(running) {
+
+            long now = System.nanoTime();
+            delta += (now - lastTime) / ns;
+            lastTime = now;
+
+            while(delta >= 1) {
+                update();
+                delta--;
+            }
+
+            render();
+            frames++;
+
+            if(System.currentTimeMillis() - timer > 1000) {
+                timer += 1000;
+                this.frame.setTitle(title + " | " + frames + " fps");
+                frames = 0;
+            }
+        }
+
+        stop();
+    }
+
+    private void render() {
+        BufferStrategy bs = this.getBufferStrategy();
+        if(bs == null) {
+            this.createBufferStrategy(3);
+            return;
+        }
+
+        Graphics g = bs.getDrawGraphics();
+
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0,WIDTH,HEIGHT);
+
+        g.setColor(Color.RED);
+        g.fillRect(50,100,200,200);
+
+        g.dispose();
+        bs.show();
+    }
+
+    private void update() {
 
     }
 }
