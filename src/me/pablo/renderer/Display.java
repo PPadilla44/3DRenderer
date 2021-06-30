@@ -2,6 +2,7 @@ package me.pablo.renderer;
 
 import me.pablo.renderer.point.MyPoint;
 import me.pablo.renderer.shapes.MyPolygon;
+import me.pablo.renderer.shapes.Tetrahedron;
 
 import javax.swing.JFrame;
 import java.awt.*;
@@ -17,6 +18,8 @@ public class Display extends Canvas implements Runnable{
     public static  final int WIDTH = 800;
     public static final int HEIGHT = 600;
     private static boolean running = false;
+
+    private Tetrahedron tetra;
 
     public Display() {
         this.frame = new JFrame();
@@ -61,6 +64,8 @@ public class Display extends Canvas implements Runnable{
         double delta = 0;
         int frames = 0;
 
+        init();
+
         while(running) {
 
             long now = System.nanoTime();
@@ -85,6 +90,27 @@ public class Display extends Canvas implements Runnable{
         stop();
     }
 
+    private void init() {
+        int s = 100;
+        MyPoint p1 = new MyPoint(s/2, -s/2, -s/2);
+        MyPoint p2 = new MyPoint(s/2, s/2, -s/2);
+        MyPoint p3 = new MyPoint(s/2, s/2, s/2);
+        MyPoint p4 = new MyPoint(s/2, -s/2, s/2);
+        MyPoint p5 = new MyPoint(-s/2, -s/2, -s/2);
+        MyPoint p6 = new MyPoint(-s/2, s/2, -s/2);
+        MyPoint p7 = new MyPoint(-s/2, s/2, s/2);
+        MyPoint p8 = new MyPoint(-s/2, -s/2, s/2);
+
+        this.tetra = new Tetrahedron(
+                Color.BLUE,
+                new MyPolygon(p1, p2, p3, p4),
+                new MyPolygon(p5, p6, p7, p8),
+                new MyPolygon(p1, p2, p5, p6),
+                new MyPolygon(p1, p5, p8, p4),
+                new MyPolygon(p2, p6, p7, p3),
+                new MyPolygon(p4, p3, p7, p8));
+    }
+
     private void render() {
         BufferStrategy bs = this.getBufferStrategy();
         if(bs == null) {
@@ -97,11 +123,8 @@ public class Display extends Canvas implements Runnable{
         g.setColor(Color.BLACK);
         g.fillRect(0,0,WIDTH,HEIGHT);
 
-        MyPolygon poly = new MyPolygon(
-                new MyPoint(0,100,0),
-                new MyPoint(0,0,0),
-                new MyPoint(0,50,50));
-        poly.render(g);
+
+        tetra.render(g);
 
 
         g.dispose();
