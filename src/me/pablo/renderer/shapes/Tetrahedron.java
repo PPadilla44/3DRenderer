@@ -12,6 +12,10 @@ public class Tetrahedron {
         this.polygons = polygons;
         this.setPolygonColor();
     }
+    public Tetrahedron(MyPolygon... polygons) {
+        this.color = color.WHITE;
+        this.polygons = polygons;
+    }
 
     public void render(Graphics g) {
 

@@ -26,6 +26,14 @@ public class PointConverter {
         double theta = Math.atan2(y3D, x3D);
         double depth2 = 15 - depth;
         double localScale = Math.abs(1400/(depth2+1400));
+
+        dist *= localScale;
+
+        double[] newVal = new double[2];
+        newVal[0] = dist * Math.cos(theta);
+        newVal[1] = dist * Math.sin(theta);
+
+        return newVal;
     }
 
 }
